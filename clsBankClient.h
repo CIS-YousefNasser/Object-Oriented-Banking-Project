@@ -20,10 +20,56 @@ private:
 		data = clsString::Split(line, Delimiter);
 		return clsBankClient(enMode::updateMode, data[0], data[1], data[2], data[3], data[4], data[5], stod(data[6]));
 	}
-	static std::string _GetAccountNumberFromLine(std::string line, std::string Delimiter = "#//#") {
+	static std::string _GetAccountNumberFromLine(std::string line, std::string delimiter = "#//#") {
 		std::vector<std::string> data;
-		data = clsString::Split(line, Delimiter);
+		data = clsString::Split(line, delimiter);
 		return data[4];
+	}
+	std::string _ConvertClientObjectToDataLine(clsBankClient &client, std::string delimiter = "#//#") {
+		std::string line;
+		line += client.firstName + delimiter;
+		line += client.lastName + delimiter;
+		line += client.email + delimiter;
+		line += client.phoneNumber + delimiter;
+		line += client.GetAccountNumber() + delimiter;
+		line += client.pincode + delimiter;
+		line += std::to_string(client.balance) + delimiter;
+		return line;
+
+	}
+	std::vector<clsBankClient> _LoadClientDataFromFile() {
+		std::vector<clsBankClient>clientsData;
+		std::ifstream file;
+		std::string line;
+		file.open("Clients.txt", std::ios::in);
+		if (file.is_open()) {
+			while (std::getline(file, line)) {
+				clientsData.push_back(_ConvertLinetoBankClientObject(line));
+			}
+		}
+		file.close();
+		return clientsData;
+	}
+	void _SaveClientDataToFile(std::vector<clsBankClient> &clientsData) {
+		std::ofstream file;
+		std::string line;
+		file.open("Clients.txt", std::ios::out);
+		if (file.is_open()) {
+			for (clsBankClient& client : clientsData) {
+				file << _ConvertClientObjectToDataLine(client) <<std::endl;
+			}
+		}
+		file.close();
+	}
+	void _Update() {
+		std::vector<clsBankClient>clientsData = _LoadClientDataFromFile();
+		for (clsBankClient& client : clientsData) {
+			if (client.GetAccountNumber() == this->_accountNumber) {
+				client = *this;
+			}
+		}
+	_SaveClientDataToFile(clientsData);
+
 	}
 public:
 	clsBankClient(enMode mode, std::string firstName, std::string lastName, std::string email,
@@ -97,6 +143,17 @@ public:
 	}
 	static bool IsClientExist(std::string accountNumber) {
 		return !(find(accountNumber).IsEmpty());
+	}
+	enum enSaveClient { svFailedEmptyObject = 0, svSuccesseded=1};
+	enSaveClient save() {
+		switch (_mode) {
+		case enMode::updateMode:
+			_Update();
+			return enSaveClient::svSuccesseded;
+		case enMode::emptyMode:
+		default:
+			return enSaveClient::svFailedEmptyObject;
+		}
 	}
 };
 
