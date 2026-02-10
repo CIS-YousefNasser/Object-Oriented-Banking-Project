@@ -21,7 +21,7 @@ public:
 		_lastName = lastName;
 
 	}
-	void SetEmailName(std::string email) {
+	void SetEmail(std::string email) {
 		_email = email;
 
 	}
@@ -48,4 +48,5 @@ public:
 	__declspec(property(put = SetEmail, get = GetEmail))std::string email;
 	__declspec(property(put = SetPhoneNumber, get = GetPhoneNumber))std::string phoneNumber;
 };
+
 
