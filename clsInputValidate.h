@@ -52,5 +52,10 @@ public:
 		}
 		return input;
 	}
+	static std::string ReadString() {
+		std::string input;
+		getline(std::cin >> ws, input);
+		return input;
+	}
 };
 
