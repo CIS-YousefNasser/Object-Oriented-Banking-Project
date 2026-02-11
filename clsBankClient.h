@@ -204,5 +204,13 @@ public:
     static std::vector<clsBankClient> GetClientsData(){
 		return _LoadClientDataFromFile();
 	}
+	static double TotalBalances() {
+		std::vector<clsBankClient> clientsData = _LoadClientDataFromFile();
+		double totalBalance=0;
+		for (clsBankClient& client : clientsData) {
+			totalBalance+=client.balance;
+		}
+		return totalBalance;
+	}
 };
 
