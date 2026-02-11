@@ -32,6 +32,7 @@ void UpdateClientInfo() {
 		std::cout << "Account Update Failed";
 	}
 }
+
 void AddNewClient() {
 	std::string accountNumber;
 	while ( clsBankClient::IsClientExist(accountNumber = clsInputValidate::AskForInput("Enter Account Number:")) ) {
@@ -69,8 +70,37 @@ void DeleteClient() {
 	else
 	std::cout << "Deletion Cancelled" << std::endl;
 }
+
+void ClientsListHeader(const vector<clsBankClient> &vClient) {
+	std::cout << std::right << std::setw(55) << "Amount of clients(" << vClient.size() << ")" << std::endl;
+	std::cout << "________________________________________________________________________________________________________________" << std::endl;
+	std::cout << "|Accout Number\t|Client Name\t\t|Phone\t\t\t|Email\t\t\t|pincode\t|Balance" << std::endl;
+	std::cout << "________________________________________________________________________________________________________________" << std::endl;
+
+}
+void ClientDataLine(clsBankClient &client) {
+	std::cout << std::left << std::setw(16) << "|" + client.GetAccountNumber();
+	std::cout << std::left << std::setw(24) << "|" + client.GetFullName();
+	std::cout << std::left << std::setw(24) << "|" + client.phoneNumber;
+	std::cout << std::left << std::setw(24) << "|" + client.email;
+	std::cout << std::left << std::setw(16) << "|" + client.pincode;
+	std::cout << "|" << client.balance << std::endl;
+
+}
+void ShowClientsList() {
+	vector<clsBankClient>vClient=clsBankClient::GetClientsData();
+	if (vClient.size() < 1) {
+		std::cout << "No Clients Available" << std::endl;
+		return;
+	}
+	ClientsListHeader(vClient);
+	
+	for (clsBankClient &client : vClient)
+		ClientDataLine(client);
+}
+
 int main() {
 	//testing
-	DeleteClient();
-	//changes in clsInputValidate.h-main.cpp-clsBankClient.h
+	ShowClientsList();
+	//changes in main.cpp-clsBankClient.h
 }
