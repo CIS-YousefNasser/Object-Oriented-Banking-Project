@@ -10,7 +10,7 @@
 class clsBankClient :public clsPerson
 {
 private:
-	enum enMode { emptyMode = 0, updateMode = 1 ,addNewMode=2};
+	enum enMode { emptyMode = 0, updateMode = 1, addNewMode = 2 };
 	enMode _mode;
 	std::string _accountNumber;
 	std::string _pincode;
@@ -48,7 +48,7 @@ private:
 		}
 		file.close();
 	}
-	std::vector<clsBankClient> _LoadClientDataFromFile() {
+	static std::vector<clsBankClient> _LoadClientDataFromFile() {
 		std::vector<clsBankClient>clientsData;
 		std::ifstream file;
 		std::string line;
@@ -200,6 +200,9 @@ public:
 		}
 		_SaveClientDataToFile(clientsData);
 		return true;
+	}
+    static std::vector<clsBankClient> GetClientsData(){
+		return _LoadClientDataFromFile();
 	}
 };
 
