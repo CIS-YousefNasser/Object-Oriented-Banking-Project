@@ -78,7 +78,7 @@ void ClientsListHeader(const vector<clsBankClient> &vClient) {
 	std::cout << "________________________________________________________________________________________________________________" << std::endl;
 
 }
-void ClientDataLine(clsBankClient &client) {
+void FullClientDataLine(clsBankClient &client) {
 	std::cout << std::left << std::setw(16) << "|" + client.GetAccountNumber();
 	std::cout << std::left << std::setw(24) << "|" + client.GetFullName();
 	std::cout << std::left << std::setw(24) << "|" + client.phoneNumber;
@@ -87,6 +87,7 @@ void ClientDataLine(clsBankClient &client) {
 	std::cout << "|" << client.balance << std::endl;
 
 }
+
 void ShowClientsList() {
 	vector<clsBankClient>vClient=clsBankClient::GetClientsData();
 	if (vClient.size() < 1) {
@@ -96,11 +97,39 @@ void ShowClientsList() {
 	ClientsListHeader(vClient);
 	
 	for (clsBankClient &client : vClient)
-		ClientDataLine(client);
+		FullClientDataLine(client);
+
 }
 
-int main() {
+void TotalBalanceHeader(const vector<clsBankClient>& vClient) {
+	std::cout << std::right << std::setw(55) << "Amount of clients(" << vClient.size() << ")" << std::endl;
+	std::cout << "_________________________________________________________________________" << std::endl;
+	std::cout << "|Accout Number\t|Client Name\t\t|Balance" << std::endl;
+	std::cout << "_________________________________________________________________________" << std::endl;
+
+}
+void ShortClientDataLine(clsBankClient& client) {
+	std::cout << std::left << std::setw(16) << "|" + client.GetAccountNumber();
+	std::cout << std::left << std::setw(24) << "|" + client.GetFullName();
+	std::cout << "|" << client.balance << std::endl;
+}
+void ShowTotalBalanceScreen(){
+	vector<clsBankClient>vClient = clsBankClient::GetClientsData();
+	if (vClient.size() < 1) {
+		std::cout << "No Clients Available" << std::endl;
+		return;
+	}
+	TotalBalanceHeader(vClient);
+
+	for (clsBankClient& client : vClient)
+		ShortClientDataLine(client);
+	std::cout << "_________________________________________________________________________" << std::endl;
+	std::cout << std::right << std::setw(50) << "Total Balance:" << clsBankClient::TotalBalances()<< std::endl;
+
+}
+int main(){
 	//testing
-	ShowClientsList();
+	ShowTotalBalanceScreen();
 	//changes in main.cpp-clsBankClient.h
+	
 }
