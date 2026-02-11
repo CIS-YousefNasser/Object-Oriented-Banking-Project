@@ -10,7 +10,7 @@
 class clsBankClient :public clsPerson
 {
 private:
-	enum enMode { emptyMode = 0, updateMode = 1 };
+	enum enMode { emptyMode = 0, updateMode = 1 ,addNewMode=2};
 	enMode _mode;
 	std::string _accountNumber;
 	std::string _pincode;
@@ -25,7 +25,8 @@ private:
 		data = clsString::Split(line, delimiter);
 		return data[4];
 	}
-	std::string _ConvertClientObjectToDataLine(clsBankClient &client, std::string delimiter = "#//#") {
+	
+	 std::string _ConvertClientObjectToDataLine(clsBankClient &client, std::string delimiter = "#//#") {
 		std::string line;
 		line += client.firstName + delimiter;
 		line += client.lastName + delimiter;
@@ -33,9 +34,17 @@ private:
 		line += client.phoneNumber + delimiter;
 		line += client.GetAccountNumber() + delimiter;
 		line += client.pincode + delimiter;
-		line += std::to_string(client.balance) + delimiter;
+		line += std::to_string(client.balance);
 		return line;
 
+	}
+	 void _AddNewClientLineToFile(const std::string &line) {
+		std::ofstream file;
+		file.open("Clients.txt", std::ios::app);
+		if (file.is_open()) {
+			file << line << std::endl;
+		}
+		file.close();
 	}
 	std::vector<clsBankClient> _LoadClientDataFromFile() {
 		std::vector<clsBankClient>clientsData;
@@ -69,7 +78,9 @@ private:
 			}
 		}
 	_SaveClientDataToFile(clientsData);
-
+	}
+	void _AddClient() {
+			_AddNewClientLineToFile(_ConvertClientObjectToDataLine(*this));
 	}
 public:
 	clsBankClient(enMode mode, std::string firstName, std::string lastName, std::string email,
@@ -144,13 +155,28 @@ public:
 	static bool IsClientExist(std::string accountNumber) {
 		return !(find(accountNumber).IsEmpty());
 	}
-	enum enSaveClient { svFailedEmptyObject = 0, svSuccesseded=1};
+	static clsBankClient GetNewClient(std::string accountNumber) {
+		return clsBankClient(clsBankClient::addNewMode, "", "", "", "", accountNumber, "", 0);
+	}
+	enum enSaveClient { svFailedEmptyObject = 0, svSuccesseded=1,svFailedAccountNumberExist=2};
 	enSaveClient save() {
 		switch (_mode) {
+		case enMode::emptyMode:
+			if (IsEmpty())
+				return enSaveClient::svFailedEmptyObject;
+
 		case enMode::updateMode:
 			_Update();
 			return enSaveClient::svSuccesseded;
-		case enMode::emptyMode:
+		case enMode::addNewMode:
+			if (IsClientExist(this->_accountNumber)) {
+				return enSaveClient::svFailedAccountNumberExist;
+			}
+			else {
+				_AddClient();
+				_mode = enMode::updateMode;
+				return enSaveClient::svSuccesseded;
+			}
 		default:
 			return enSaveClient::svFailedEmptyObject;
 		}
