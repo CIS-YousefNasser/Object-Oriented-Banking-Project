@@ -15,13 +15,10 @@ void ReadClientInfo(clsBankClient &client) {
 	std::cout << "Please Enter Balance:";
 	client.balance = clsInputValidate::ValidateDoubleNumber("Please enter a valid Balance");
 }
-std::string AskForInput(std::string message){
-	std::cout << message;
-	return clsInputValidate::ReadString();
-}
+
 void UpdateClientInfo() {
 	std::string accountNumber;
-	while (!(clsBankClient::IsClientExist(accountNumber=AskForInput("Enter Account Number:")) ) ) {
+	while (!(clsBankClient::IsClientExist(accountNumber=clsInputValidate::AskForInput("Enter Account Number:")) ) ) {
 		std::cout << "Please Enter a valid Account Number" << std::endl;
 	}
 	clsBankClient client=clsBankClient::find(accountNumber);
@@ -37,7 +34,7 @@ void UpdateClientInfo() {
 }
 void AddNewClient() {
 	std::string accountNumber;
-	while ( clsBankClient::IsClientExist(accountNumber = AskForInput("Enter Account Number:")) ) {
+	while ( clsBankClient::IsClientExist(accountNumber = clsInputValidate::AskForInput("Enter Account Number:")) ) {
 		std::cout << "Account Number Already Exists" << std::endl;
 	}
 	clsBankClient client = clsBankClient::GetNewClient(accountNumber);
@@ -57,8 +54,23 @@ void AddNewClient() {
 
 	}
 }
+void DeleteClient() {
+	std::string accountNumber;
+
+	while (!(clsBankClient::IsClientExist(accountNumber = clsInputValidate::AskForInput("Enter Account Number:")))) {
+		std::cout << "Please Enter a valid Account Number" << std::endl;
+	}
+	clsBankClient client = clsBankClient::find(accountNumber);
+	client.Print();
+	if (std::tolower(clsInputValidate::ReadChar("Do you want to delete this account (y/n):")) == 'y') {
+		client.Delete();
+		client.Print();
+	}
+	else
+	std::cout << "Deletion Cancelled" << std::endl;
+}
 int main() {
 	//testing
-	AddNewClient();
-	UpdateClientInfo();
+	DeleteClient();
+	//changes in clsInputValidate.h-main.cpp-clsBankClient.h
 }
