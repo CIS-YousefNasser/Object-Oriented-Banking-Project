@@ -15,6 +15,8 @@ private:
 	std::string _accountNumber;
 	std::string _pincode;
 	double _balance;
+	bool _markForDeletion =false;
+
 	static clsBankClient _ConvertLinetoBankClientObject(std::string line, std::string Delimiter = "#//#") {
 		std::vector<std::string> data;
 		data = clsString::Split(line, Delimiter);
@@ -65,6 +67,9 @@ private:
 		file.open("Clients.txt", std::ios::out);
 		if (file.is_open()) {
 			for (clsBankClient& client : clientsData) {
+				if (client._markForDeletion) {
+					continue;
+				}
 				file << _ConvertClientObjectToDataLine(client) <<std::endl;
 			}
 		}
@@ -118,6 +123,7 @@ public:
 		std::cout << std::left << std::setw(25) << "Full Name" << ":" << GetFullName() << std::endl;
 		std::cout << std::left << std::setw(25) << "email" << ":" << email << std::endl;
 		std::cout << std::left << std::setw(25) << "phone Number" << ":" << phoneNumber << std::endl;
+		std::cout << std::left << std::setw(25) << "Balance" << ":" << balance << std::endl;
 		std::cout << "\n---------------------------------------------------\n";
 
 	}
@@ -180,6 +186,20 @@ public:
 		default:
 			return enSaveClient::svFailedEmptyObject;
 		}
+	}
+	bool Delete() {
+		if (!IsClientExist(this->_accountNumber)) {
+			return false;
+		}
+		std::vector<clsBankClient> clientsData = _LoadClientDataFromFile();
+		for (clsBankClient& client : clientsData) {
+			if (this->_accountNumber == client._accountNumber) {
+				client._markForDeletion = true;
+				*this = GetEmptyClient();
+			}
+		}
+		_SaveClientDataToFile(clientsData);
+		return true;
 	}
 };
 
