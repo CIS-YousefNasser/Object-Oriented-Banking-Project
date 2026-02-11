@@ -57,5 +57,14 @@ public:
 		getline(std::cin >> ws, input);
 		return input;
 	}
+	static std::string AskForInput(std::string message) {
+		std::cout << message;
+		return ReadString();
+	}
+	static char ReadChar(std::string message) {
+		char input;
+		std::cout << message;
+		cin >> input;
+		return input;
+	}
 };
-
