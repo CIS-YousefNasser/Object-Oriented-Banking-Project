@@ -8,6 +8,7 @@
 #include "clsDeleteClient.h"
 #include "clsFindClients.h"
 #include "clsTransactionScreen.h"
+#include "clsManageUserScreen.h"
 class clsMainMenuScreen:protected clsScreen
 {
 private:
@@ -44,7 +45,7 @@ private:
 		ReturnToMainMenu();
 	}
 	static void _ManageUsersScreen() {
-		std::cout << "Feature coming soon" << std::endl;
+		clsManageUserScreen::ShowUserScreen();
 		ReturnToMainMenu();
 	}
 	static enMainMenuOptions _NumberToMainMenuOptions(int number) {
@@ -82,6 +83,7 @@ private:
 			_ManageUsersScreen();
 			break;
 		case enMainMenuOptions::logout:
+			
 			break;
 		default:
 			std::cout << "Error In Perform Main Menu Options" << std::endl;
