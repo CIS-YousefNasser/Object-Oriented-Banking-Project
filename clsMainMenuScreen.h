@@ -7,6 +7,7 @@
 #include "clsUpdateClient.h"
 #include "clsDeleteClient.h"
 #include "clsFindClients.h"
+#include "clsTransactionScreen.h"
 class clsMainMenuScreen:protected clsScreen
 {
 private:
@@ -39,7 +40,7 @@ private:
 		ReturnToMainMenu();
 	}
 	static void _TransactionsScreen() {
-		std::cout << "Feature coming soon" << std::endl;
+		clsTransactionScreen::TransactionScreen();
 		ReturnToMainMenu();
 	}
 	static void _ManageUsersScreen() {
