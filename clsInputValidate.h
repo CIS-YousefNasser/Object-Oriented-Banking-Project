@@ -25,8 +25,9 @@ public:
 		return (date.year > 0 && (date.month <= 12 && date.month > 0) && (date.day > 0 && date.day <= clsDate::NumberOfDaysInAMonth(date.year, date.month)));
 	}
 
-	static int ValidateIntNumber(string message) {
+	static int ValidateIntNumber(string errorMessage, string message = "") {
 		int x;
+		std::cout << message;
 		while (!(cin >> x)) {
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -34,12 +35,13 @@ public:
 		}
 		return x;
 	}
-	static double ValidateDoubleNumber(string message) {
+	static double ValidateDoubleNumber(string errorMessage,string message="") {
 		double x;
+		std::cout << message;
 		while (!(cin >> x)) {
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			cout << message << endl;
+			cout << errorMessage << endl;
 		}
 		return x;
 	}
@@ -47,7 +49,7 @@ public:
 		int input = ValidateIntNumber("Error:Please enter a valid number");
 
 		while (input > to || input < from) {
-			std::cout << message << endl;
+			std::cout << message;
 			input = ValidateIntNumber("Error:Please enter a valid number");
 		}
 		return input;
@@ -61,6 +63,20 @@ public:
 		std::cout << message;
 		return ReadString();
 	}
+	static double ReadPostiveDouble(std::string message) {
+		double number;
+		while ((number = ValidateDoubleNumber("Please Enter A Number:",message)) < 0) {
+			std::cout << "Please Enter a postive Number" << std::endl;
+		}
+		return number;
+	}
+	static int ReadPostiveInt(std::string message) {
+		int number;
+		while ((number = ValidateIntNumber("Please Enter A Number:", message)) < 0) {
+			std::cout << "Please Enter a postive Number" << std::endl;
+		}
+		return number;
+	}
 	static char ReadChar(std::string message) {
 		char input;
 		std::cout << message;
@@ -68,3 +84,4 @@ public:
 		return input;
 	}
 };
+
