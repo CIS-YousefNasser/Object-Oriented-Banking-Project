@@ -2,6 +2,10 @@
 #include "clsScreen.h"
 #include "clsInputValidate.h"
 #include "clsAddNewUser.h"
+#include "clsShowUsersScreen.h"
+#include "clsDeleteUser.h"
+#include "clsUpdateUser.h"
+#include "clsFindUser.h"
 class clsManageUserScreen:protected clsScreen
 {
 private:
@@ -30,46 +34,49 @@ private:
 		int number = clsInputValidate::ReadNumberBetween(1, 6, "Please Enter a Number Between[1-6]:");
 		return number;
 	}
-	static void _ShowDepositOption() {
-	
+	static void _ShowUsersOption() {
+		clsShowUsersScreen::ShowUsersList();
 		_ReturnToManageUserScreen();
 	}
-	static void _AddNewUserOption() {
 
+	static void _AddNewUserOption() {
+		clsAddNewUser::AddNewUserScreen();
 		_ReturnToManageUserScreen();
 	
 	}
 	static void _DeleteUserOption() {
-
+		clsDeleteUser::DeleteUserScreen();
 		_ReturnToManageUserScreen();
 	}
 	static void _UpdateUserOption() {
-
+		clsUpdateUser::UpdateUserInfoScreen();
 		_ReturnToManageUserScreen();
 	}
 	static void _FindUserOption() {
-
+		clsFindUser::FindUserScreen();
 		_ReturnToManageUserScreen();
 	}
 	
 	static enManageUserMenu _PerformManageUserOptions() {
 		enManageUserMenu choice = _NumberToManageUserEnum(_GetManageUserChoice());
+		system("cls");
+
 		switch (choice) {
 
 		case enManageUserMenu::usersList:
-			std::cout << "coming soon" << std::endl;
+			_ShowUsersOption();
 			break;
 		case enManageUserMenu::addNewUser:
-			clsAddNewUser::AddNewUserScreen();
+			_AddNewUserOption();
 			break;
 		case enManageUserMenu::deleteUser:
-			std::cout << "coming soon" << std::endl;
+			_DeleteUserOption();
 			break;
 		case enManageUserMenu::updateUser:
-			std::cout << "coming soon" << std::endl;
+			_UpdateUserOption();
 			break;
 		case enManageUserMenu::findUser:
-			std::cout << "coming soon" << std::endl;
+			_FindUserOption();
 			break;
 		}
 		return choice;
