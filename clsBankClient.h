@@ -28,7 +28,7 @@ private:
 		return data[4];
 	}
 	
-	 std::string _ConvertClientObjectToDataLine(clsBankClient &client, std::string delimiter = "#//#") {
+	 static std::string _ConvertClientObjectToDataLine(clsBankClient &client, std::string delimiter = "#//#") {
 		std::string line;
 		line += client.firstName + delimiter;
 		line += client.lastName + delimiter;
@@ -61,7 +61,7 @@ private:
 		file.close();
 		return clientsData;
 	}
-	void _SaveClientDataToFile(std::vector<clsBankClient> &clientsData) {
+	static void _SaveClientDataToFile(std::vector<clsBankClient> &clientsData) {
 		std::ofstream file;
 		std::string line;
 		file.open("Clients.txt", std::ios::out);
@@ -113,27 +113,13 @@ public:
 	}
 	__declspec(property(put = SetPincode, get = GetPincode))std::string pincode;
 	__declspec(property(put = SetBalance, get = GetBalance))double balance;
-
-	void Print() {
-		std::cout << "\n---------------------------------------------------\n";
-		std::cout << std::left << std::setw(25) << "Account Number" << ":" << _accountNumber << std::endl;
-		std::cout << std::left << std::setw(25) << "pincode" << ":" << _pincode << std::endl;
-		std::cout << std::left << std::setw(25) << "First Name" << ":" << firstName << std::endl;
-		std::cout << std::left << std::setw(25) << "Last Name" << ":" << lastName << std::endl;
-		std::cout << std::left << std::setw(25) << "Full Name" << ":" << GetFullName() << std::endl;
-		std::cout << std::left << std::setw(25) << "email" << ":" << email << std::endl;
-		std::cout << std::left << std::setw(25) << "phone Number" << ":" << phoneNumber << std::endl;
-		std::cout << std::left << std::setw(25) << "Balance" << ":" << balance << std::endl;
-		std::cout << "\n---------------------------------------------------\n";
-
-	}
 	static clsBankClient GetEmptyClient() {
 		return clsBankClient(enMode::emptyMode, "", "", "", "", "", "", 0);
 	}
 	bool IsEmpty() {
 		return _mode == enMode::emptyMode;
 	}
-	static clsBankClient find(std::string accountNumber) {
+	static clsBankClient Find(std::string accountNumber) {
 		std::ifstream file;
 		std::string line;
 		std::string clientAccountNumber;
@@ -153,19 +139,19 @@ public:
 		return GetEmptyClient();
 	}
 	static clsBankClient find(std::string accountNumber, std::string pincode) {
-		clsBankClient client = find(accountNumber);
+		clsBankClient client = Find(accountNumber);
 		if (!(client.IsEmpty()) && client.pincode == pincode)
 			return client;
 		return GetEmptyClient();
 	}
 	static bool IsClientExist(std::string accountNumber) {
-		return !(find(accountNumber).IsEmpty());
+		return !(Find(accountNumber).IsEmpty());
 	}
 	static clsBankClient GetNewClient(std::string accountNumber) {
 		return clsBankClient(clsBankClient::addNewMode, "", "", "", "", accountNumber, "", 0);
 	}
 	enum enSaveClient { svFailedEmptyObject = 0, svSuccesseded=1,svFailedAccountNumberExist=2};
-	enSaveClient save() {
+	enSaveClient Save() {
 		switch (_mode) {
 		case enMode::emptyMode:
 			if (IsEmpty())
@@ -203,6 +189,14 @@ public:
 	}
     static std::vector<clsBankClient> GetClientsData(){
 		return _LoadClientDataFromFile();
+	}
+	void Deposit(double amount) {
+		balance += amount;
+	    Save();
+	}
+	void Withdraw(double amount) {
+		balance -= amount;
+		Save();
 	}
 	static double TotalBalances() {
 		std::vector<clsBankClient> clientsData = _LoadClientDataFromFile();
