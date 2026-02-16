@@ -3,6 +3,7 @@
 #include "clsInputValidate.h"
 #include "clsDepositScreen.h"
 #include "clsWithdrawScreen.h"
+#include "clsTotalBalanceScreen.h"
 class clsTransactionScreen:protected clsScreen
 {
 private:
@@ -37,6 +38,10 @@ private:
 		clsWithdrawScreen::ShowWithdrawOption();
 		_ReturnToTransactionScreen();
 	}
+	static void _ShowTotalBalance() {
+		clsTotalBalanceScreen::ShowTotalBalanceScreen();
+		_ReturnToTransactionScreen();
+	}
 	static enTransactionsMenu _PerformTransactionOptions() {
 		enTransactionsMenu choice = _NumberToTransactionMenuChoicesEnum(_GetTransactionChoice());
 		switch (choice) {
@@ -46,11 +51,9 @@ private:
 			break;
 		case enTransactionsMenu::withdraw:
 			_ShowWithDrawScreen();
-
-
 			break;
 		case enTransactionsMenu::totalBalances:
-			std::cout << "Coming Soon" << std::endl;
+			_ShowTotalBalance();
 			break;
 		}
 		return choice;
