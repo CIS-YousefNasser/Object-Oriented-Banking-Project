@@ -24,15 +24,15 @@ private:
 		return data[4];
 	}
 
-	static std::string _ConvertUserObjectToDataLine(clsUser& client, std::string delimiter = "#//#") {
+	static std::string _ConvertUserObjectToDataLine(clsUser& user, std::string delimiter = "#//#") {
 		std::string line;
-		line += client.firstName + delimiter;
-		line += client.lastName + delimiter;
-		line += client.email + delimiter;
-		line += client.phoneNumber + delimiter;
-		line += client._username+ delimiter;
-		line += client.password + delimiter;
-		line += std::to_string(client.permissions);
+		line += user.firstName + delimiter;
+		line += user.lastName + delimiter;
+		line += user.email + delimiter;
+		line += user.phoneNumber + delimiter;
+		line += user._username+ delimiter;
+		line += user.password + delimiter;
+		line += std::to_string(user.permissions);
 		return line;
 
 	}
