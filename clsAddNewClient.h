@@ -2,7 +2,7 @@
 #include "clsScreen.h"
 #include "clsBankClient.h"
 #include "clsInputValidate.h"
-class clsAddNewClientScreen:clsScreen
+class clsAddNewClientScreen:protected clsScreen
 {
 private:
 	static void _ReadClientInfo(clsBankClient& client) {
@@ -26,7 +26,7 @@ private:
 		}
 		clsBankClient client = clsBankClient::GetNewClient(accountNumber);
 		_ReadClientInfo(client);
-		switch (client.save()) {
+		switch (client.Save()) {
 		case clsBankClient::enSaveClient::svSuccesseded:
 			std::cout << "Account Added Successfully" << std::endl;
 			break;
