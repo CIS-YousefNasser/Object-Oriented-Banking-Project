@@ -32,7 +32,7 @@ private:
 		line += client.phoneNumber + delimiter;
 		line += client._username+ delimiter;
 		line += client.password + delimiter;
-		line += to_string(client.permissions);
+		line += std::to_string(client.permissions);
 		return line;
 
 	}
@@ -139,7 +139,7 @@ public:
 		file.close();
 		return GetEmptyUser();
 	}
-	static clsUser find(std::string username, std::string password) {
+	static clsUser Find(std::string username, std::string password) {
 		clsUser user = Find(username);
 		if (!(user.IsEmpty()) && user._password == password)
 			return user;
@@ -151,27 +151,27 @@ public:
 	static clsUser GetNewUser(std::string username) {
 		return clsUser(clsUser::addNewMode, "", "", "", "", username, "", 0);
 	}
-	enum enSaveClient { svFailedEmptyObject = 0, svSuccesseded = 1, svFailedUsernameExist = 2 };
-	enSaveClient Save() {
+	enum enSaveUser { svFailedEmptyObject = 0, svSuccesseded = 1, svFailedUsernameExist = 2 };
+	enSaveUser Save() {
 		switch (_mode) {
 		case enMode::emptyMode:
 			if (IsEmpty())
-				return enSaveClient::svFailedEmptyObject;
+				return enSaveUser::svFailedEmptyObject;
 
 		case enMode::updateMode:
 			_Update();
-			return enSaveClient::svSuccesseded;
+			return enSaveUser::svSuccesseded;
 		case enMode::addNewMode:
 			if (IsUserExist(this->_username)) {
-				return enSaveClient::svFailedUsernameExist;
+				return enSaveUser::svFailedUsernameExist;
 			}
 			else {
 				_AddUser();
 				_mode = enMode::updateMode;
-				return enSaveClient::svSuccesseded;
+				return enSaveUser::svSuccesseded;
 			}
 		default:
-			return enSaveClient::svFailedEmptyObject;
+			return enSaveUser::svFailedEmptyObject;
 		}
 	}
 	bool Delete() {
@@ -190,6 +190,11 @@ public:
 	}
 	static std::vector<clsUser> GetUsersData() {
 		return _LoadUserDataFromFile();
+	}
+	bool IsAllowedAccess(int permissions) {
+		if ((this->_permissions & permissions) == permissions)
+			return true;
+		return false;
 	}
 };
 
