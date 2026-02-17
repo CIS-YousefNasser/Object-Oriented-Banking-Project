@@ -1,10 +1,8 @@
-#include <iostream>
-#include "clsBankClient.h"
-#include "clsInputValidate.h"
-#include "clsMainMenuScreen.h"
-
+#include "clsLogin.h"
 int main(){
-		clsMainMenuScreen::MainMenuScreen();
-	
+	do {
+		clsLogin::LoginScreen();
+	} while (true);
+		
 	
 }
