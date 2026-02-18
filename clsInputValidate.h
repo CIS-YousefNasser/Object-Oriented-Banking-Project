@@ -30,7 +30,7 @@ public:
 		std::cout << message;
 		while (!(cin >> x)) {
 			cin.clear();
-			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 			cout << message << endl;
 		}
 		return x;
@@ -40,7 +40,7 @@ public:
 		std::cout << message;
 		while (!(cin >> x)) {
 			cin.clear();
-			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 			cout << errorMessage << endl;
 		}
 		return x;

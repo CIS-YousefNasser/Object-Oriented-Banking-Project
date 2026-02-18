@@ -24,9 +24,9 @@ private:
 		while (!(clsBankClient::IsClientExist(accountNumber = clsInputValidate::AskForInput("Enter Account Number:")))) {
 			std::cout << "Please Enter a valid Account Number" << std::endl;
 		}
-		clsBankClient client = clsBankClient::find(accountNumber);
+		clsBankClient client = clsBankClient::Find(accountNumber);
 		_ReadClientInfo(client);
-		switch (client.save()) {
+		switch (client.Save()) {
 		case clsBankClient::enSaveClient::svSuccesseded:
 			std::cout << "Account Updated Successfully" << std::endl;
 			break;

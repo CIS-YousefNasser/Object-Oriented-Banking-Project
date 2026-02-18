@@ -23,7 +23,7 @@ class clsFindClients:protected clsScreen
 	{
 		std::cout << "Client With Account Number(" << accountNumber << ")" << std::endl;
 	}
-		return clsBankClient::find(accountNumber);
+		return clsBankClient::Find(accountNumber);
 
 	}
 public:

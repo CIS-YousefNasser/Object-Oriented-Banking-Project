@@ -49,4 +49,3 @@ public:
 	__declspec(property(put = SetPhoneNumber, get = GetPhoneNumber))std::string phoneNumber;
 };
 
-
